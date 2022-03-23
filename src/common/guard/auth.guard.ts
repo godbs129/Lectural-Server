@@ -2,15 +2,21 @@ import {
   BadRequestException,
   CanActivate,
   ExecutionContext,
+  UnauthorizedException,
 } from '@nestjs/common';
+import { AuthService } from 'src/api/auth/auth.service';
+import { TokenService } from 'src/api/token/token.service';
+import { User } from 'src/domain/entity/user.entity';
+import { IToken } from '../interfaces/IToken';
 import AuthRequest from '../types/auth.request';
 
 export class AuthGuard implements CanActivate {
-  constructor() {
-    // Token Service & User Service
-  }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly tokenService: TokenService,
+  ) {}
 
-  public canActivate(context: ExecutionContext): boolean {
+  public async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = context.switchToHttp();
     const request: AuthRequest = ctx.getRequest();
 
@@ -20,8 +26,16 @@ export class AuthGuard implements CanActivate {
       throw new BadRequestException('토큰이 존재하지 않습니다');
     }
 
-    // Todo: 토큰 verify & 유저 정보 가져오는 로직
-    request.user = 'asdf';
+    const payload: IToken = this.tokenService.verifyToken(token);
+    const user: User | undefined = await this.authService.getUserById(
+      payload.uniqueId,
+    );
+
+    if (user === undefined) {
+      throw new UnauthorizedException('존재하지 않는 유저');
+    }
+
+    request.user = user;
     return true;
   }
 }
