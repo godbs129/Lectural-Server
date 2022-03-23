@@ -6,6 +6,8 @@ import { AppService } from './app.service';
 import CatchException from './common/filter/ExceptionFilter';
 import { LoggerMiddleWare } from './common/middleware/logger.middleware';
 import { DatabaseModule } from './config/database/database.module';
+import { AuthModule } from './api/auth/auth.module';
+import { TokenModule } from './api/token/token.module';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { DatabaseModule } from './config/database/database.module';
       isGlobal: true,
     }),
     DatabaseModule,
+    AuthModule,
+    TokenModule,
   ],
   controllers: [AppController],
   providers: [
