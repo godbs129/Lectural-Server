@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ILoginRes } from 'src/common/interfaces/IAuth';
-import ResponseData from 'src/common/response/DataResponse';
-import DodamLoginDto from 'src/domain/dto/auth/dodamLogin.dto';
+import { ILoginRes } from '../../common/interfaces/IAuth';
+import ResponseData from '../../common/response/DataResponse';
+import DodamLoginDto from '../../domain/dto/auth/dodamLogin.dto';
 import { AuthService } from './auth.service';
 
 @Controller('auth')

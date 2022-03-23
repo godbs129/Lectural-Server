@@ -1,6 +1,6 @@
 import { Body, Controller, Get } from '@nestjs/common';
-import ResponseData from 'src/common/response/DataResponse';
-import { RefreshTokenDto } from 'src/domain/dto/token/refreshToken.dto';
+import ResponseData from '../../common/response/DataResponse';
+import { RefreshTokenDto } from '../../domain/dto/token/refreshToken.dto';
 import { TokenService } from './token.service';
 
 @Controller('token')
