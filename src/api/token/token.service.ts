@@ -62,7 +62,7 @@ export class TokenService {
     return this.jwtService.sign(Payload, Options);
   }
 
-  async refreshToken(refreshToken: string): Promise<string> {
+  refreshToken(refreshToken: string): string {
     const { iss, uniqueId, sub }: IToken = this.verifyToken(refreshToken);
 
     if (iss !== 'lectural' || sub !== 'refreshToken') {
