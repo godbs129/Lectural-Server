@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios, { AxiosResponse } from 'axios';
 import { create } from 'domain';
-import { ILoginRes } from 'src/common/interfaces/IAuth';
+import { ILoginRes, IRequestData } from 'src/common/interfaces/IAuth';
 import DodamLoginDto from 'src/domain/dto/auth/dodamLogin.dto';
 import { User } from 'src/domain/entity/user.entity';
 import { TokenService } from '../token/token.service';
@@ -17,13 +17,15 @@ export class AuthService {
   ) {}
 
   async dodamLogin(data: DodamLoginDto): Promise<ILoginRes> {
+    const requestData: IRequestData = {
+      code: data.code,
+      client_id: this.configService.get<string>('client_id'),
+      client_secret: this.configService.get<string>('client_secret'),
+    };
+
     const getToken: AxiosResponse = await axios.post(
       'http://dauth.b1nd.com/api/token',
-      {
-        code: data.code,
-        client_id: this.configService.get<string>('client_id'),
-        client_secret: this.configService.get<string>('client_secret'),
-      },
+      requestData,
     );
 
     const getUser: AxiosResponse = await axios.get(
@@ -35,7 +37,7 @@ export class AuthService {
       },
     );
 
-    let user: User = await this.userRepository.findById(
+    let user: User | undefined = await this.userRepository.findById(
       getUser.data.data.uniqueId,
     );
 

@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ILoginRes } from 'src/common/interfaces/IAuth';
 import ResponseData from 'src/common/response/DataResponse';
 import DodamLoginDto from 'src/domain/dto/auth/dodamLogin.dto';
@@ -6,13 +7,18 @@ import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Get('/url')
   dodamLoginUrl() {
+    const clientId: string = this.configService.get<string>('client_id');
+
     return ResponseData.dataOk(
       '로그인 url 조회 성공',
-      'http://dauth.b1nd.com/login?response_type=code&client_id=a343cf807a50458aab810330cae31e8d66c3e390a62a476d8c354f973aa61229&state=null&redirect_uri=http://localhost:3000',
+      `http://dauth.b1nd.com/login?response_type=code&client_id=${clientId}&state=null&redirect_uri=http://localhost:3000`,
     );
   }
 
