@@ -65,7 +65,7 @@ export class TokenService {
   async refreshToken(refreshToken: string): Promise<string> {
     const { iss, uniqueId, sub }: IToken = this.verifyToken(refreshToken);
 
-    if (iss !== 'lectural' || sub !== 'accessToken') {
+    if (iss !== 'lectural' || sub !== 'refreshToken') {
       throw new BadRequestException('위조된 토큰');
     }
 
