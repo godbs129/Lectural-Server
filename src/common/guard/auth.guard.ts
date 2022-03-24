@@ -2,6 +2,7 @@ import {
   BadRequestException,
   CanActivate,
   ExecutionContext,
+  Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from 'src/api/auth/auth.service';
@@ -10,6 +11,7 @@ import { User } from 'src/domain/entity/user.entity';
 import { IToken } from '../interfaces/IToken';
 import AuthRequest from '../types/auth.request';
 
+@Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly authService: AuthService,
