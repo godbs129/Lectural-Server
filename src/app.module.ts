@@ -8,6 +8,7 @@ import { LoggerMiddleWare } from './common/middleware/logger.middleware';
 import { DatabaseModule } from './config/database/database.module';
 import { AuthModule } from './api/auth/auth.module';
 import { TokenModule } from './api/token/token.module';
+import { LectureModule } from './api/lecture/lecture.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { TokenModule } from './api/token/token.module';
     DatabaseModule,
     AuthModule,
     TokenModule,
+    LectureModule,
   ],
   controllers: [AppController],
   providers: [
