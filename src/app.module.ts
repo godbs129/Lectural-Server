@@ -9,6 +9,7 @@ import { DatabaseModule } from './config/database/database.module';
 import { AuthModule } from './api/auth/auth.module';
 import { TokenModule } from './api/token/token.module';
 import { LectureModule } from './api/lecture/lecture.module';
+import { PlaceModule } from './api/place/place.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { LectureModule } from './api/lecture/lecture.module';
     AuthModule,
     TokenModule,
     LectureModule,
+    PlaceModule,
   ],
   controllers: [AppController],
   providers: [
