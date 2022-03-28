@@ -38,9 +38,9 @@ export class LectureService {
       material: data.material,
       startDate: data.startDate,
       endDate: data.endDate,
+      user: user,
+      place: place,
     });
-    lecture.user = user;
-    lecture.place = place;
 
     await this.lectureRepository.save(lecture);
   }
