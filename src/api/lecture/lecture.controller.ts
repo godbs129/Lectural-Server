@@ -7,11 +7,13 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { Token } from 'src/common/decorators/token.decorator';
 import { AuthGuard } from 'src/common/guard/auth.guard';
 import ResponseData from 'src/common/response/DataResponse';
 import Response from 'src/common/response/response';
 import { LectureDto } from 'src/domain/dto/lecture/lecture.dto';
 import { Lecture } from 'src/domain/entity/lecture.entity';
+import { User } from 'src/domain/entity/user.entity';
 import { LectureService } from './lecture.service';
 
 @Controller('lecture')
@@ -36,7 +38,12 @@ export class LectureController {
   @Post('/')
   @UseGuards(AuthGuard)
   @HttpCode(200)
-  async addLecture(@Body() dto: LectureDto): Promise<Response> {
-    return Response.ok('');
+  async addLecture(
+    @Body() dto: LectureDto,
+    @Token() user: User,
+  ): Promise<Response> {
+    await this.lectureService.addLecture(dto, user);
+
+    return Response.ok('특강 등록 성공');
   }
 }
