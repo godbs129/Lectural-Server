@@ -11,7 +11,7 @@ export class TokenController {
   async refreshToken(
     @Body() data: RefreshTokenDto,
   ): Promise<ResponseData<string>> {
-    const accessToken: string = await this.tokenService.refreshToken(
+    const accessToken: string = this.tokenService.refreshToken(
       data.refreshToken,
     );
 

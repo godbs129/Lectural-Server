@@ -14,6 +14,12 @@ export class Place {
   })
   name!: string;
 
+  @Column({
+    name: 'type',
+    nullable: false,
+  })
+  type!: number;
+
   @OneToMany(() => Lecture, (lecture) => lecture.place)
   place!: Place[];
 }

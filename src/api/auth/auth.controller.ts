@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ILoginRes } from '../../common/interfaces/IAuth';
 import ResponseData from '../../common/response/DataResponse';
@@ -12,8 +19,8 @@ export class AuthController {
     private readonly configService: ConfigService,
   ) {}
 
-  @Get('/url')
-  dodamLoginUrl() {
+  @Get('/')
+  dodamLoginUrl(): ResponseData<string> {
     const clientId: string = this.configService.get<string>('client_id');
 
     return ResponseData.dataOk(
@@ -22,6 +29,7 @@ export class AuthController {
     );
   }
 
+  @HttpCode(200)
   @Post('/')
   async dodamLogin(
     @Body() data: DodamLoginDto,
