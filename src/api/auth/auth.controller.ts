@@ -7,7 +7,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AuthGuard } from 'src/common/guard/auth.guard';
 import { ILoginRes } from '../../common/interfaces/IAuth';
 import ResponseData from '../../common/response/DataResponse';
 import DodamLoginDto from '../../domain/dto/auth/dodamLogin.dto';
