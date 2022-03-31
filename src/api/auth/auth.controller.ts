@@ -20,7 +20,7 @@ export class AuthController {
   ) {}
 
   @Get('/')
-  dodamLoginUrl() {
+  dodamLoginUrl(): ResponseData<string> {
     const clientId: string = this.configService.get<string>('client_id');
 
     return ResponseData.dataOk(
