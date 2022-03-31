@@ -21,11 +21,11 @@ export class LectureDto {
 
   @IsNotEmpty()
   @IsDateString()
-  startDate?: string;
+  startDate!: string;
 
   @IsNotEmpty()
   @IsDateString()
-  endDate?: string;
+  endDate!: string;
 
   @IsOptional()
   @IsNumber()
