@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import validateData from 'src/common/lib/validateData';
 import { LectureDto } from 'src/domain/dto/lecture/lecture.dto';
 import { Lecture } from 'src/domain/entity/lecture.entity';
 import { Place } from 'src/domain/entity/place.entity';
@@ -22,7 +23,7 @@ export class LectureService {
       idx,
     );
 
-    if (lecture === undefined) {
+    if (!validateData(lecture)) {
       throw new NotFoundException('존재하지 않는 특강');
     }
 

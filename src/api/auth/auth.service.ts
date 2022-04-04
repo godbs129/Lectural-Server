@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios, { AxiosResponse } from 'axios';
 import { create } from 'domain';
 import { ILoginRes, IRequestData } from 'src/common/interfaces/IAuth';
+import validateData from 'src/common/lib/validateData';
 import DodamLoginDto from 'src/domain/dto/auth/dodamLogin.dto';
 import { User } from 'src/domain/entity/user.entity';
 import { TokenService } from '../token/token.service';
@@ -41,7 +42,7 @@ export class AuthService {
       getUser.data.data.uniqueId,
     );
 
-    if (user === undefined) {
+    if (!validateData(user)) {
       user = this.userRepository.create({
         uniqueId: getUser.data.data.uniqueId,
         name: getUser.data.data.name,
@@ -64,7 +65,13 @@ export class AuthService {
     };
   }
 
-  public getUserById(id: string) {
-    return this.userRepository.findById(id);
+  public async getUserById(id: string): Promise<User> {
+    const user = await this.userRepository.findById(id);
+
+    if (!validateData(user)) {
+      throw new NotFoundException('존재하지 않는 유저');
+    }
+
+    return user;
   }
 }

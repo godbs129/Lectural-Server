@@ -9,6 +9,7 @@ import { AuthService } from 'src/api/auth/auth.service';
 import { TokenService } from 'src/api/token/token.service';
 import { User } from 'src/domain/entity/user.entity';
 import { IToken } from '../interfaces/IToken';
+import validateData from '../lib/validateData';
 import AuthRequest from '../types/auth.request';
 
 @Injectable()
@@ -24,18 +25,12 @@ export class AuthGuard implements CanActivate {
 
     const token: string = request.headers['authorization'];
 
-    if (token === undefined) {
+    if (!validateData(token)) {
       throw new BadRequestException('토큰이 존재하지 않습니다');
     }
 
     const payload: IToken = this.tokenService.verifyToken(token);
-    const user: User | undefined = await this.authService.getUserById(
-      payload.uniqueId,
-    );
-
-    if (user === undefined) {
-      throw new UnauthorizedException('존재하지 않는 유저');
-    }
+    const user: User = await this.authService.getUserById(payload.uniqueId);
 
     request.user = user;
     return true;
