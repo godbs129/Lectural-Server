@@ -1,4 +1,4 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import ResponseData from '../../common/response/DataResponse';
 import { RefreshTokenDto } from '../../domain/dto/token/refreshToken.dto';
 import { TokenService } from './token.service';
@@ -7,7 +7,7 @@ import { TokenService } from './token.service';
 export class TokenController {
   constructor(private readonly tokenService: TokenService) {}
 
-  @Get('/refresh')
+  @Post('/refresh')
   async refreshToken(
     @Body() data: RefreshTokenDto,
   ): Promise<ResponseData<string>> {
