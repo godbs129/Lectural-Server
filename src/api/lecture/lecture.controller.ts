@@ -7,6 +7,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { Roles } from 'src/common/decorators/roles.decorator';
 import { Token } from 'src/common/decorators/token.decorator';
 import { AuthGuard } from 'src/common/guard/auth.guard';
 import ResponseData from 'src/common/response/DataResponse';
@@ -28,7 +29,7 @@ export class LectureController {
   }
 
   @Get('/:idx')
-  @UseGuards(AuthGuard)
+  @Roles(1, 3)
   async getLecture(@Param('idx') idx: number): Promise<ResponseData<Lecture>> {
     const lecture: Lecture = await this.lectureService.getLecture(idx);
 
@@ -36,7 +37,7 @@ export class LectureController {
   }
 
   @Post('/')
-  @UseGuards(AuthGuard)
+  @Roles(1, 3)
   @HttpCode(200)
   async addLecture(
     @Body() dto: LectureDto,
