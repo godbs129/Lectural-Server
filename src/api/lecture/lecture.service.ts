@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import validateData from 'src/common/lib/validateData';
 import { LectureDto } from 'src/domain/dto/lecture/lecture.dto';
 import { Lecture } from 'src/domain/entity/lecture.entity';
@@ -44,5 +48,14 @@ export class LectureService {
     });
 
     await this.lectureRepository.save(lecture);
+  }
+
+  /**
+   * @description 부적절한 특강 삭제(관리자)
+   */
+  async deleteLecture(idx: number): Promise<void> {
+    const lecture: Lecture = await this.getLecture(idx);
+
+    await this.lectureRepository.remove(lecture);
   }
 }

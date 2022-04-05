@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -46,5 +47,13 @@ export class LectureController {
     await this.lectureService.addLecture(dto, user);
 
     return Response.ok('특강 등록 성공');
+  }
+
+  @Delete('/:idx')
+  @Roles(3)
+  async deleteLecture(@Param('idx') idx: number): Promise<Response> {
+    await this.lectureService.deleteLecture(idx);
+
+    return Response.ok('부적절한 특강 삭제');
   }
 }
