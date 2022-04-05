@@ -25,9 +25,9 @@ export class User {
 
   @Column({
     name: 'profile_image',
-    nullable: false,
+    nullable: true,
   })
-  profileImage!: string;
+  profileImage?: string;
 
   @OneToMany(() => Application, (application) => application.user)
   application!: Application[];
