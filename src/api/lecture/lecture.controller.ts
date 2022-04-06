@@ -6,6 +6,7 @@ import {
   HttpCode,
   Param,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { Roles } from 'src/common/decorators/roles.decorator';
@@ -54,6 +55,17 @@ export class LectureController {
   async deleteLecture(@Param('idx') idx: number): Promise<Response> {
     await this.lectureService.deleteLecture(idx);
 
-    return Response.ok('부적절한 특강 삭제');
+    return Response.ok('부적절한 특강 삭제 성공');
+  }
+
+  @Put('/:lectureIdx/:placeIdx')
+  @Roles(3)
+  async reassignment(
+    @Param('lectureIdx') lectureIdx: number,
+    @Param('placeIdx') placeIdx: number,
+  ): Promise<Response> {
+    await this.lectureService.reassignment(lectureIdx, placeIdx);
+
+    return Response.ok('장소 재배정 성공');
   }
 }

@@ -58,4 +58,12 @@ export class LectureService {
 
     await this.lectureRepository.remove(lecture);
   }
+
+  async reassignment(lectureIdx: number, placeIdx: number): Promise<void> {
+    const lecture: Lecture = await this.getLecture(lectureIdx);
+    const place: Place = await this.placeService.getPlace(placeIdx);
+
+    lecture.place = place;
+    await this.lectureRepository.save(lecture);
+  }
 }
