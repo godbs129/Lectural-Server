@@ -8,6 +8,7 @@ import { LectureDto } from 'src/domain/dto/lecture/lecture.dto';
 import { Lecture } from 'src/domain/entity/lecture.entity';
 import { Place } from 'src/domain/entity/place.entity';
 import { User } from 'src/domain/entity/user.entity';
+import { ApplicationService } from '../application/application.service';
 import { PlaceService } from '../place/place.service';
 import LectureRepository from './repository/lecture.repository';
 
@@ -16,6 +17,7 @@ export class LectureService {
   constructor(
     private readonly lectureRepository: LectureRepository,
     private readonly placeService: PlaceService,
+    private readonly applicatoinService: ApplicationService,
   ) {}
 
   getLectures(): Promise<Lecture[]> {
@@ -65,5 +67,11 @@ export class LectureService {
 
     lecture.place = place;
     await this.lectureRepository.save(lecture);
+  }
+
+  async auditApplication(lectureIdx: number, user: User): Promise<void> {
+    const lecture: Lecture = await this.getLecture(lectureIdx);
+
+    await this.applicatoinService.createApplication(lecture, user);
   }
 }

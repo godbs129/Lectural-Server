@@ -68,4 +68,15 @@ export class LectureController {
 
     return Response.ok('장소 재배정 성공');
   }
+
+  @Post('/audit/:idx')
+  @Roles(1)
+  async auditApplication(
+    @Param('idx') idx: number,
+    @Token() user: User,
+  ): Promise<Response> {
+    await this.lectureService.auditApplication(idx, user);
+
+    return Response.ok('청강 신청 완료');
+  }
 }

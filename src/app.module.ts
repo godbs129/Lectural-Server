@@ -11,6 +11,7 @@ import { TokenModule } from './api/token/token.module';
 import { LectureModule } from './api/lecture/lecture.module';
 import { PlaceModule } from './api/place/place.module';
 import { RoleGuard } from './common/guard/role.guard';
+import { ApplicationModule } from './api/application/application.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { RoleGuard } from './common/guard/role.guard';
     TokenModule,
     LectureModule,
     PlaceModule,
+    ApplicationModule,
   ],
   controllers: [AppController],
   providers: [

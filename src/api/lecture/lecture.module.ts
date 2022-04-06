@@ -6,6 +6,7 @@ import LectureRepository from './repository/lecture.repository';
 import { AuthModule } from '../auth/auth.module';
 import { TokenModule } from '../token/token.module';
 import { PlaceModule } from '../place/place.module';
+import { ApplicationModule } from '../application/application.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { PlaceModule } from '../place/place.module';
     AuthModule,
     TokenModule,
     PlaceModule,
+    ApplicationModule,
   ],
   providers: [LectureService],
   controllers: [LectureController],
