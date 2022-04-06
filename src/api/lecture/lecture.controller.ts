@@ -1,12 +1,15 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
+import { Roles } from 'src/common/decorators/roles.decorator';
 import { Token } from 'src/common/decorators/token.decorator';
 import { AuthGuard } from 'src/common/guard/auth.guard';
 import ResponseData from 'src/common/response/DataResponse';
@@ -28,7 +31,7 @@ export class LectureController {
   }
 
   @Get('/:idx')
-  @UseGuards(AuthGuard)
+  @Roles(1, 3)
   async getLecture(@Param('idx') idx: number): Promise<ResponseData<Lecture>> {
     const lecture: Lecture = await this.lectureService.getLecture(idx);
 
@@ -36,7 +39,7 @@ export class LectureController {
   }
 
   @Post('/')
-  @UseGuards(AuthGuard)
+  @Roles(1, 3)
   @HttpCode(200)
   async addLecture(
     @Body() dto: LectureDto,
@@ -45,5 +48,35 @@ export class LectureController {
     await this.lectureService.addLecture(dto, user);
 
     return Response.ok('특강 등록 성공');
+  }
+
+  @Delete('/:idx')
+  @Roles(3)
+  async deleteLecture(@Param('idx') idx: number): Promise<Response> {
+    await this.lectureService.deleteLecture(idx);
+
+    return Response.ok('부적절한 특강 삭제 성공');
+  }
+
+  @Put('/:lectureIdx/:placeIdx')
+  @Roles(3)
+  async reassignment(
+    @Param('lectureIdx') lectureIdx: number,
+    @Param('placeIdx') placeIdx: number,
+  ): Promise<Response> {
+    await this.lectureService.reassignment(lectureIdx, placeIdx);
+
+    return Response.ok('장소 재배정 성공');
+  }
+
+  @Post('/audit/:idx')
+  @Roles(1)
+  async auditApplication(
+    @Param('idx') idx: number,
+    @Token() user: User,
+  ): Promise<Response> {
+    await this.lectureService.auditApplication(idx, user);
+
+    return Response.ok('청강 신청 완료');
   }
 }

@@ -3,25 +3,35 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
-  UnauthorizedException,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { AuthService } from 'src/api/auth/auth.service';
 import { TokenService } from 'src/api/token/token.service';
 import { User } from 'src/domain/entity/user.entity';
 import { IToken } from '../interfaces/IToken';
+import matchRoles from '../lib/matchRoles';
 import validateData from '../lib/validateData';
 import AuthRequest from '../types/auth.request';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class RoleGuard implements CanActivate {
   constructor(
-    private readonly authService: AuthService,
+    private readonly reflector: Reflector,
     private readonly tokenService: TokenService,
+    private readonly authService: AuthService,
   ) {}
 
-  public async canActivate(context: ExecutionContext): Promise<boolean> {
-    const ctx = context.switchToHttp();
-    const request: AuthRequest = ctx.getRequest();
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request: AuthRequest = context.switchToHttp().getRequest();
+
+    const roles: number[] = this.reflector.get<number[]>(
+      'roles',
+      context.getHandler(),
+    );
+
+    if (!validateData(roles)) {
+      return true;
+    }
 
     const token: string = request.headers['authorization'];
 
@@ -33,6 +43,6 @@ export class AuthGuard implements CanActivate {
     const user: User = await this.authService.getUserById(payload.uniqueId);
 
     request.user = user;
-    return true;
+    return matchRoles(roles, user.accessLevel);
   }
 }
