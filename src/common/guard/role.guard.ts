@@ -29,7 +29,7 @@ export class RoleGuard implements CanActivate {
       context.getHandler(),
     );
 
-    if (roles === undefined) {
+    if (!validateData(roles)) {
       return true;
     }
 
