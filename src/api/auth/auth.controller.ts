@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ILoginRes } from '../../common/interfaces/IAuth';
 import ResponseData from '../../common/response/DataResponse';

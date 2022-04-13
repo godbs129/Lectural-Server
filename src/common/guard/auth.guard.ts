@@ -3,7 +3,6 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from 'src/api/auth/auth.service';
 import { TokenService } from 'src/api/token/token.service';
