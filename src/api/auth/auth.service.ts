@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios, { AxiosResponse } from 'axios';
-import { create } from 'domain';
 import { ILoginRes, IRequestData } from 'src/common/interfaces/IAuth';
 import validateData from 'src/common/lib/validateData';
 import DodamLoginDto from 'src/domain/dto/auth/dodamLogin.dto';

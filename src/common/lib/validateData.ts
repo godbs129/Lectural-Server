@@ -1,4 +1,4 @@
-export default (data: Object | string): boolean => {
+export default (data: unknown): boolean => {
   if (data === undefined || data === null) {
     return false;
   }

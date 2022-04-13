@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import validateData from 'src/common/lib/validateData';
 import { LectureDto } from 'src/domain/dto/lecture/lecture.dto';
 import { Lecture } from 'src/domain/entity/lecture.entity';

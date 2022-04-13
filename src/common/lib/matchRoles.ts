@@ -1,5 +1,5 @@
 export default (roles: number[], userRole: number): boolean => {
-  for (let role of roles) {
+  for (const role of roles) {
     if (role === userRole) {
       return true;
     }
