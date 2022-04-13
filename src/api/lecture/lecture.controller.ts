@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Token } from 'src/common/decorators/token.decorator';
-import { AuthGuard } from 'src/common/guard/auth.guard';
 import ResponseData from 'src/common/response/DataResponse';
 import Response from 'src/common/response/response';
 import { LectureDto } from 'src/domain/dto/lecture/lecture.dto';
