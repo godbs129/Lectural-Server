@@ -1,10 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { User } from 'src/domain/entity/user.entity';
+import { getConnection, Repository } from 'typeorm';
+import { AuthModule } from './auth.module';
 import { AuthService } from './auth.service';
 import { UserRepository } from './repository/user.repository';
 import { TokenModule } from '../token/token.module';
 import { ConfigModule } from '@nestjs/config';
-import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 const mockPostRepository = () => ({
