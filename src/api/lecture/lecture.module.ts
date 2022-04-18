@@ -18,5 +18,6 @@ import { ApplicationModule } from '../application/application.module';
   ],
   providers: [LectureService],
   controllers: [LectureController],
+  exports: [LectureService],
 })
 export class LectureModule {}
