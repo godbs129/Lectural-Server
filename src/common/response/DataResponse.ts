@@ -1,4 +1,4 @@
-import Response from './response';
+import { Response } from './response';
 
 export default class ResponseData<T> extends Response {
   data: T;
