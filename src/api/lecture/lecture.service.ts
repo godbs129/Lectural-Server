@@ -1,6 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import validateData from 'src/common/lib/validateData';
-import { LectureDto } from 'src/domain/dto/lecture/lecture.dto';
+import { CreateLectureDto } from 'src/domain/dto/lecture/create-lecture.dto';
 import { Lecture } from 'src/domain/entity/lecture.entity';
 import { Place } from 'src/domain/entity/place.entity';
 import { User } from 'src/domain/entity/user.entity';
@@ -32,7 +36,7 @@ export class LectureService {
     return lecture;
   }
 
-  async addLecture(data: LectureDto, user: User): Promise<void> {
+  async addLecture(data: CreateLectureDto, user: User): Promise<void> {
     const place: Place = await this.placeService.getPlace(data.placeIdx);
 
     const lecture: Lecture = this.lectureRepository.create({
@@ -48,10 +52,18 @@ export class LectureService {
     await this.lectureRepository.save(lecture);
   }
 
+  async modifyLecture(idx: number, user: User): Promise<void> {
+    const lecture: Lecture = await this.getLecture(idx);
+
+    if (lecture.user !== user) {
+      throw new UnauthorizedException('본인의 특강이 아닙니다');
+    }
+  }
+
   /**
    * @description 부적절한 특강 삭제(관리자)
    */
-  async deleteLecture(idx: number): Promise<void> {
+  async deleteInappositeLecture(idx: number): Promise<void> {
     const lecture: Lecture = await this.getLecture(idx);
 
     await this.lectureRepository.remove(lecture);

@@ -12,7 +12,7 @@ import { Roles } from 'src/common/decorators/roles.decorator';
 import { Token } from 'src/common/decorators/token.decorator';
 import ResponseData from 'src/common/response/DataResponse';
 import Response from 'src/common/response/response';
-import { LectureDto } from 'src/domain/dto/lecture/lecture.dto';
+import { CreateLectureDto } from 'src/domain/dto/lecture/create-lecture.dto';
 import { Lecture } from 'src/domain/entity/lecture.entity';
 import { User } from 'src/domain/entity/user.entity';
 import { LectureService } from './lecture.service';
@@ -40,7 +40,7 @@ export class LectureController {
   @Roles(1, 3)
   @HttpCode(200)
   async addLecture(
-    @Body() dto: LectureDto,
+    @Body() dto: CreateLectureDto,
     @Token() user: User,
   ): Promise<Response> {
     await this.lectureService.addLecture(dto, user);
@@ -48,10 +48,18 @@ export class LectureController {
     return Response.ok('특강 등록 성공');
   }
 
-  @Delete('/:idx')
+  @Put('/:lectureIdx')
+  @Roles(1)
+  async modifyLecture(@Param('lectureIdx') lectureIdx: number) {}
+
+  @Delete('/:lectureIdx')
+  @Roles(1)
+  async deleteLecture(@Param('lectureIdx') lectureIdx: number) {}
+
+  @Delete('/inapposite/:idx')
   @Roles(3)
-  async deleteLecture(@Param('idx') idx: number): Promise<Response> {
-    await this.lectureService.deleteLecture(idx);
+  async deleteInappositeLecture(@Param('idx') idx: number): Promise<Response> {
+    await this.lectureService.deleteInappositeLecture(idx);
 
     return Response.ok('부적절한 특강 삭제 성공');
   }

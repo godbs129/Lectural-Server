@@ -65,7 +65,11 @@ export class AuthService {
   }
 
   public async getUserById(id: string): Promise<User> {
-    const user = await this.userRepository.findById(id);
+    const user = await this.userRepository.findOne({
+      where: {
+        uniqueId: id,
+      },
+    });
 
     if (!validateData(user)) {
       throw new NotFoundException('존재하지 않는 유저');
