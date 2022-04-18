@@ -5,7 +5,7 @@ import { UserRepository } from './repository/user.repository';
 import { TokenModule } from '../token/token.module';
 import { ConfigModule } from '@nestjs/config';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 
 const mockUserRepository = () => ({
   save: jest.fn(),
@@ -70,7 +70,7 @@ describe('AuthService', () => {
       try {
         await authService.getUserById('woaihgoweih');
       } catch (error) {
-        expect(error).toBeInstanceOf(UnauthorizedException);
+        expect(error).toBeInstanceOf(NotFoundException);
       }
     });
   });
