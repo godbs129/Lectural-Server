@@ -6,7 +6,7 @@ import {
   IsString,
 } from 'class-validator';
 
-export class LectureDto {
+export class CreateLectureDto {
   @IsNotEmpty()
   @IsString()
   title!: string;
