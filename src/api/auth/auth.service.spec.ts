@@ -65,7 +65,7 @@ describe('AuthService', () => {
     });
 
     it('userId로 유저 조회 실패', async () => {
-      userRepository.findById.mockResolvedValue(null);
+      userRepository.findById.mockResolvedValue(undefined);
 
       try {
         await authService.getUserById('woaihgoweih');
