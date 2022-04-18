@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import validateData from 'src/common/lib/validateData';
 import { CreateLectureDto } from 'src/domain/dto/lecture/create-lecture.dto';
+import { ModifyLectureDto } from 'src/domain/dto/lecture/modify-lecture.dto';
 import { Lecture } from 'src/domain/entity/lecture.entity';
 import { Place } from 'src/domain/entity/place.entity';
 import { User } from 'src/domain/entity/user.entity';
@@ -52,12 +53,31 @@ export class LectureService {
     await this.lectureRepository.save(lecture);
   }
 
-  async modifyLecture(idx: number, user: User): Promise<void> {
+  async modifyLecture(
+    idx: number,
+    user: User,
+    data: ModifyLectureDto,
+  ): Promise<void> {
     const lecture: Lecture = await this.getLecture(idx);
 
-    if (lecture.user !== user) {
+    let place: Place;
+    if (data.placeIdx !== undefined) {
+      place = await this.placeService.getPlace(data.placeIdx);
+    }
+
+    if (lecture.uniqueId !== user.uniqueId) {
       throw new UnauthorizedException('본인의 특강이 아닙니다');
     }
+
+    this.lectureRepository.merge(lecture, {
+      title: data.title,
+      content: data.content,
+      material: data.material,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      place: place,
+    });
+    await this.lectureRepository.save(lecture);
   }
 
   /**

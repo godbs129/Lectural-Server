@@ -13,6 +13,7 @@ import { Token } from 'src/common/decorators/token.decorator';
 import ResponseData from 'src/common/response/DataResponse';
 import Response from 'src/common/response/response';
 import { CreateLectureDto } from 'src/domain/dto/lecture/create-lecture.dto';
+import { ModifyLectureDto } from 'src/domain/dto/lecture/modify-lecture.dto';
 import { Lecture } from 'src/domain/entity/lecture.entity';
 import { User } from 'src/domain/entity/user.entity';
 import { LectureService } from './lecture.service';
@@ -50,7 +51,15 @@ export class LectureController {
 
   @Put('/:lectureIdx')
   @Roles(1)
-  async modifyLecture(@Param('lectureIdx') lectureIdx: number) {}
+  async modifyLecture(
+    @Param('lectureIdx') lectureIdx: number,
+    @Body() dto: ModifyLectureDto,
+    @Token() user: User,
+  ): Promise<Response> {
+    await this.lectureService.modifyLecture(lectureIdx, user, dto);
+
+    return Response.ok('특강 수정 성공');
+  }
 
   @Delete('/:lectureIdx')
   @Roles(1)
