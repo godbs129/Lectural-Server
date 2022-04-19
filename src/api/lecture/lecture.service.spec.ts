@@ -2,6 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { CreateLectureDto } from 'src/domain/dto/lecture/create-lecture.dto';
 import { Lecture } from 'src/domain/entity/lecture.entity';
 import { ApplicationService } from '../application/application.service';
 import { ApplicationRepository } from '../application/repository/application.repository';
@@ -15,7 +16,29 @@ import LectureRepository from './repository/lecture.repository';
 const mockLectureRepository = () => ({
   find: jest.fn(),
   findByIdx: jest.fn(),
+  save: jest.fn(),
 });
+
+const mockLecture = {
+  idx: 1,
+  title: 'asdlkfnwelk',
+  content: 'asdf',
+  material: 'asdf',
+  user: {
+    uniqueId: 'woaihgoweih',
+    name: 'Lectural',
+    accessLevel: 1,
+    profileImage: 'https://naver.com',
+  },
+  place: {
+    idx: 1,
+    name: '특강 장소',
+    type: 1,
+  },
+  startDate: '2022-04-19T12:00:00',
+  endDate: '2022-04-19T12:00:00',
+  createdAt: '2022-04-19T12:00:00',
+};
 
 type MockRepository<T = any> = Partial<Record<keyof T, jest.Mock>>;
 
@@ -66,21 +89,6 @@ describe('LectureService', () => {
 
   describe('getLecture', () => {
     it('특정 특강 조회 성공', async () => {
-      const mockLecture = {
-        idx: 1,
-        title: 'asdlkfnwelk',
-        content: 'asdf',
-        user: {
-          uniqueId: 'woaihgoweih',
-          name: 'Lectural',
-          accessLevel: 1,
-          profileImage: 'https://naver.com',
-        },
-        startDate: new Date(),
-        endDate: new Date(),
-        createdAt: new Date(),
-      };
-
       lectureRepository.findByIdx.mockResolvedValue(mockLecture);
 
       const result = await lectureService.getLecture(1);
@@ -101,7 +109,24 @@ describe('LectureService', () => {
     });
   });
 
-  // describe('addLecture', () => {
-  //   it('특강 생성 성공', async () => {});
-  // });
+  describe('addLecture', () => {
+    it('특강 생성 성공', async () => {
+      lectureRepository.save.mockResolvedValue(mockLecture);
+
+      const createLectureDto: CreateLectureDto = {
+        title: 'asdlkfnwelk',
+        content: 'asdf',
+        material: 'asdf',
+        startDate: '2022-04-19T12:00:00',
+        endDate: '2022-04-19T12:00:00',
+        placeIdx: 1,
+      };
+
+      // const result: Lecture = await lectureService.addLecture(createLectureDto, );
+
+      // expect(lectureRepository.save).toHaveBeenCalledTimes(1);
+      // expect(lectureRepository.save).toHaveBeenCalledWith(mockLecture);
+      // expect();
+    });
+  });
 });

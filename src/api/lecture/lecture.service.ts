@@ -39,7 +39,7 @@ export class LectureService {
     return lecture;
   }
 
-  async addLecture(data: CreateLectureDto, user: User): Promise<void> {
+  async addLecture(data: CreateLectureDto, user: User): Promise<Lecture> {
     const place: Place = await this.placeService.getPlace(data.placeIdx);
 
     const lecture: Lecture = this.lectureRepository.create({
@@ -52,7 +52,7 @@ export class LectureService {
       place: place,
     });
 
-    await this.lectureRepository.save(lecture);
+    return await this.lectureRepository.save(lecture);
   }
 
   async modifyLecture(
