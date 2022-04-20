@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
 import axios, { AxiosResponse } from 'axios';
 import { ILoginRes, IRequestData } from 'src/common/interfaces/IAuth';
 import validateData from 'src/common/lib/validateData';
@@ -11,6 +12,7 @@ import { UserRepository } from './repository/user.repository';
 @Injectable()
 export class AuthService {
   constructor(
+    @InjectRepository(User)
     private readonly userRepository: UserRepository,
     private readonly tokenService: TokenService,
     private readonly configService: ConfigService,
@@ -65,11 +67,6 @@ export class AuthService {
   }
 
   public async getUserById(id: string): Promise<User> {
-    // const user: User = await this.userRepository.findOne({
-    //   where: {
-    //     uniqueId: id,
-    //   },
-    // });
     const user: User = await this.userRepository.findById(id);
 
     if (!validateData(user)) {

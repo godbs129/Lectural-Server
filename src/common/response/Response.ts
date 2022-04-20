@@ -1,4 +1,4 @@
-export default class Response {
+export class Response {
   status: number;
   message: string;
 

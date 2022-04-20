@@ -3,6 +3,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import validateData from 'src/common/lib/validateData';
 import { CreateLectureDto } from 'src/domain/dto/lecture/create-lecture.dto';
 import { ModifyLectureDto } from 'src/domain/dto/lecture/modify-lecture.dto';
@@ -16,6 +17,7 @@ import LectureRepository from './repository/lecture.repository';
 @Injectable()
 export class LectureService {
   constructor(
+    @InjectRepository(Lecture)
     private readonly lectureRepository: LectureRepository,
     private readonly placeService: PlaceService,
     private readonly applicatoinService: ApplicationService,
@@ -37,7 +39,7 @@ export class LectureService {
     return lecture;
   }
 
-  async addLecture(data: CreateLectureDto, user: User): Promise<void> {
+  async addLecture(data: CreateLectureDto, user: User): Promise<Lecture> {
     const place: Place = await this.placeService.getPlace(data.placeIdx);
 
     const lecture: Lecture = this.lectureRepository.create({
@@ -50,7 +52,7 @@ export class LectureService {
       place: place,
     });
 
-    await this.lectureRepository.save(lecture);
+    return await this.lectureRepository.save(lecture);
   }
 
   async modifyLecture(

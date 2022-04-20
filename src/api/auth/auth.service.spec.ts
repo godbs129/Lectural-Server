@@ -1,64 +1,77 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { User } from 'src/domain/entity/user.entity';
-import { getConnection, Repository } from 'typeorm';
-import { AuthModule } from './auth.module';
 import { AuthService } from './auth.service';
 import { UserRepository } from './repository/user.repository';
 import { TokenModule } from '../token/token.module';
 import { ConfigModule } from '@nestjs/config';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { NotFoundException } from '@nestjs/common';
 
-const mockPostRepository = () => ({
+const mockUserRepository = () => ({
   save: jest.fn(),
   find: jest.fn(),
   findOne: jest.fn(),
   softDelete: jest.fn(),
+  findById: jest.fn(),
 });
 
-type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
+type MockRepository<T = any> = Partial<Record<keyof T, jest.Mock>>;
 
 describe('AuthService', () => {
   let authService: AuthService;
-  // let userRepository: UserRepository;
-  let userRepository: MockRepository<User>;
+  let userRepository: MockRepository<UserRepository>;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         TokenModule,
+        UserRepository,
         ConfigModule.forRoot({
           isGlobal: true,
         }),
       ],
       providers: [
         AuthService,
+        UserRepository,
         {
           provide: getRepositoryToken(User),
-          useValue: mockPostRepository(),
+          useValue: mockUserRepository(),
         },
-        UserRepository,
       ],
     }).compile();
 
     authService = module.get<AuthService>(AuthService);
-    userRepository = module.get<MockRepository<User>>(getRepositoryToken(User));
+    userRepository = module.get<MockRepository<UserRepository>>(
+      getRepositoryToken(User),
+    );
   });
 
   describe('getUserById', () => {
-    it('userId로 유저 조회', async () => {
-      // const user: User = await authService.getUserById('test');
-      // console.log(user);
+    it('userId로 유저 조회 성공', async () => {
       const mockedUser = {
         uniqueId: 'woaihgoweih',
-        name: '전해윤',
+        name: 'Lectural',
         accessLevel: 1,
-        profileImage: '1284u12',
+        profileImage: 'https://naver.com',
       };
 
-      userRepository.findOne.mockResolvedValue(mockedUser);
+      userRepository.findById.mockResolvedValue(mockedUser);
 
       const result = await authService.getUserById('woaihgoweih');
-      console.log(result);
+
+      expect(userRepository.findById).toHaveBeenCalledTimes(1);
+      expect(userRepository.findById).toHaveBeenCalledWith('woaihgoweih');
+      expect(result).toEqual(mockedUser);
+    });
+
+    it('userId로 유저 조회 실패', async () => {
+      userRepository.findById.mockResolvedValue(undefined);
+
+      try {
+        await authService.getUserById('woaihgoweih');
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+      }
     });
   });
 });
