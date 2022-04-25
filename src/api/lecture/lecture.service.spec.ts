@@ -4,6 +4,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreateLectureDto } from 'src/domain/dto/lecture/create-lecture.dto';
 import { Lecture } from 'src/domain/entity/lecture.entity';
+import { Place } from 'src/domain/entity/place.entity';
+import { User } from 'src/domain/entity/user.entity';
 import { ApplicationService } from '../application/application.service';
 import { ApplicationRepository } from '../application/repository/application.repository';
 import { UserRepository } from '../auth/repository/user.repository';
@@ -17,6 +19,10 @@ const mockLectureRepository = () => ({
   find: jest.fn(),
   findByIdx: jest.fn(),
   save: jest.fn(),
+});
+
+const mockPlaceRepository = () => ({
+  getPlace: jest.fn(),
 });
 
 const mockLecture = {
@@ -40,11 +46,20 @@ const mockLecture = {
   createdAt: '2022-04-19T12:00:00',
 };
 
+const mockPlace = {
+  idx: 1,
+  name: '특강 장소',
+  type: 1,
+};
+
 type MockRepository<T = any> = Partial<Record<keyof T, jest.Mock>>;
 
 describe('LectureService', () => {
   let lectureService: LectureService;
   let lectureRepository: MockRepository<LectureRepository>;
+
+  let placeService: PlaceService;
+  let placeRepository: MockRepository<PlaceRepository>;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -68,12 +83,21 @@ describe('LectureService', () => {
           provide: getRepositoryToken(Lecture),
           useValue: mockLectureRepository(),
         },
+        {
+          provide: getRepositoryToken(Place),
+          useValue: mockPlaceRepository(),
+        },
       ],
     }).compile();
 
     lectureService = module.get<LectureService>(LectureService);
     lectureRepository = module.get<MockRepository<LectureRepository>>(
       getRepositoryToken(Lecture),
+    );
+
+    placeService = module.get<PlaceService>(PlaceService);
+    placeRepository = module.get<MockRepository<PlaceRepository>>(
+      getRepositoryToken(Place),
     );
   });
 
@@ -109,24 +133,40 @@ describe('LectureService', () => {
     });
   });
 
-  describe('addLecture', () => {
-    it('특강 생성 성공', async () => {
-      lectureRepository.save.mockResolvedValue(mockLecture);
+  // describe('addLecture', () => {
+  //   it('특강 생성 성공', async () => {
+  //     lectureRepository.save.mockResolvedValue(mockLecture);
+  //     placeRepository.getPlace.mockResolvedValue(mockPlace);
 
-      const createLectureDto: CreateLectureDto = {
-        title: 'asdlkfnwelk',
-        content: 'asdf',
-        material: 'asdf',
-        startDate: '2022-04-19T12:00:00',
-        endDate: '2022-04-19T12:00:00',
-        placeIdx: 1,
-      };
+  //     const user = new User();
 
-      // const result: Lecture = await lectureService.addLecture(createLectureDto, );
+  //     const createLectureDto: CreateLectureDto = {
+  //       title: 'asdlkfnwelk',
+  //       content: 'asdf',
+  //       material: 'asdf',
+  //       startDate: '2022-04-19T12:00:00',
+  //       endDate: '2022-04-19T12:00:00',
+  //       placeIdx: 1,
+  //     };
 
-      // expect(lectureRepository.save).toHaveBeenCalledTimes(1);
-      // expect(lectureRepository.save).toHaveBeenCalledWith(mockLecture);
-      // expect();
-    });
-  });
+  //     const result: Lecture = await lectureService.addLecture(
+  //       createLectureDto,
+  //       user,
+  //     );
+
+  //     const createdLecture = {
+  //       title: 'asdlkfnwelk',
+  //       content: 'asdf',
+  //       material: 'asdf',
+  //       startDate: '2022-04-19T12:00:00',
+  //       endDate: '2022-04-19T12:00:00',
+  //       placeIdx: 1,
+  //       user: user,
+  //     };
+
+  //     expect(lectureRepository.save).toHaveBeenCalledTimes(1);
+  //     expect(lectureRepository.save).toHaveBeenCalledWith(mockLecture);
+  //     expect(result).toEqual(createdLecture);
+  //   });
+  // });
 });

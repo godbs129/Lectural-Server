@@ -9,6 +9,7 @@ import {
   RelationId,
 } from 'typeorm';
 import { Application } from './application.entity';
+import { Notice } from './notice.entity';
 import { Place } from './place.entity';
 import { User } from './user.entity';
 
@@ -77,4 +78,7 @@ export class Lecture {
 
   @OneToMany(() => Application, (application) => application.lecture)
   application!: Application[];
+
+  @OneToMany(() => Notice, (notice) => notice.lecture)
+  notice!: Notice[];
 }

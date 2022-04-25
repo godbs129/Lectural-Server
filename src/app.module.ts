@@ -13,6 +13,7 @@ import { PlaceModule } from './api/place/place.module';
 import { RoleGuard } from './common/guard/role.guard';
 import { ApplicationModule } from './api/application/application.module';
 import { RequestModule } from './api/request/request.module';
+import { NoticeModule } from './api/notice/notice.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { RequestModule } from './api/request/request.module';
     PlaceModule,
     ApplicationModule,
     RequestModule,
+    NoticeModule,
   ],
   controllers: [AppController],
   providers: [
