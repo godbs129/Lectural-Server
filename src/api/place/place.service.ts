@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
 import axios, { AxiosResponse } from 'axios';
 import { IPlace } from 'src/common/interfaces/IPlace';
 import validateData from 'src/common/lib/validateData';
@@ -9,6 +10,7 @@ import { PlaceRepository } from './repository/place.repository';
 @Injectable()
 export class PlaceService {
   constructor(
+    @InjectRepository(Place)
     private readonly placeRepository: PlaceRepository,
     private readonly configService: ConfigService,
   ) {}
