@@ -185,5 +185,29 @@ describe('LectureService', () => {
       expect(lectureRepository.save).toHaveBeenCalledTimes(1);
       expect(result).toEqual(createdLecture);
     });
+
+    it('특강 생성 중 위치 없음 Error', async () => {
+      lectureRepository.save.mockResolvedValue(mockLecture);
+      placeRepository.getPlace.mockResolvedValue(null);
+
+      const user = new User();
+
+      const createLectureDto: CreateLectureDto = {
+        title: 'asdlkfnwelk',
+        content: 'asdf',
+        material: 'asdf',
+        startDate: '2022-04-19T12:00:00',
+        endDate: '2022-04-19T12:00:00',
+        placeIdx: 1,
+      };
+
+      try {
+        await lectureService.addLecture(createLectureDto, user);
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+      }
+    });
   });
+
+  describe('특강 수정', () => {});
 });
