@@ -227,11 +227,13 @@ describe('LectureService', () => {
         name: '특강 장소',
         type: 1,
       },
+      uniqueId: 'woaihgoweih',
       user: mockUser,
       createdAt: '2022-04-19T12:00:00',
     };
 
     it('글 수정 성공', async () => {
+      lectureRepository.save.mockResolvedValue(updatedLecture);
       lectureRepository.findByIdx.mockResolvedValue(mockLecture);
       placeRepository.getPlace.mockResolvedValue(mockPlace);
 
