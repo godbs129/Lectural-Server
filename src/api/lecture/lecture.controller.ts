@@ -11,7 +11,7 @@ import {
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Token } from 'src/common/decorators/token.decorator';
 import ResponseData from 'src/common/response/DataResponse';
-import { Response } from 'src/common/response/response';
+import { Response } from 'src/common/response/Response';
 import { CreateLectureDto } from 'src/domain/dto/lecture/create-lecture.dto';
 import { ModifyLectureDto } from 'src/domain/dto/lecture/modify-lecture.dto';
 import { Lecture } from 'src/domain/entity/lecture.entity';
