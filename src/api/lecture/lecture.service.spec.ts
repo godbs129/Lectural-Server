@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreateLectureDto } from 'src/domain/dto/lecture/create-lecture.dto';
+import { ModifyLectureDto } from 'src/domain/dto/lecture/modify-lecture.dto';
 import { Lecture } from 'src/domain/entity/lecture.entity';
 import { Place } from 'src/domain/entity/place.entity';
 import { User } from 'src/domain/entity/user.entity';
@@ -20,6 +21,7 @@ const mockLectureRepository = () => ({
   findByIdx: jest.fn(),
   save: jest.fn(),
   create: jest.fn(),
+  merge: jest.fn(),
 });
 
 const mockPlaceRepository = () => ({
@@ -31,6 +33,7 @@ const mockLecture = {
   title: 'asdlkfnwelk',
   content: 'asdf',
   material: 'asdf',
+  uniqueId: 'woaihgoweih',
   user: {
     uniqueId: 'woaihgoweih',
     name: 'Lectural',
@@ -73,7 +76,6 @@ describe('LectureService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         TokenModule,
-        PlaceRepository,
         UserRepository,
         ApplicationRepository,
         ConfigModule.forRoot({
@@ -82,17 +84,15 @@ describe('LectureService', () => {
       ],
       providers: [
         LectureService,
-        LectureRepository,
         PlaceService,
-        PlaceRepository,
         ApplicationService,
         ApplicationRepository,
         {
-          provide: getRepositoryToken(Lecture),
+          provide: getRepositoryToken(LectureRepository),
           useValue: mockLectureRepository(),
         },
         {
-          provide: getRepositoryToken(Place),
+          provide: getRepositoryToken(PlaceRepository),
           useValue: mockPlaceRepository(),
         },
       ],
@@ -100,12 +100,12 @@ describe('LectureService', () => {
 
     lectureService = module.get<LectureService>(LectureService);
     lectureRepository = module.get<MockRepository<LectureRepository>>(
-      getRepositoryToken(Lecture),
+      getRepositoryToken(LectureRepository),
     );
 
     placeService = module.get<PlaceService>(PlaceService);
     placeRepository = module.get<MockRepository<PlaceRepository>>(
-      getRepositoryToken(Place),
+      getRepositoryToken(PlaceRepository),
     );
   });
 
@@ -142,24 +142,24 @@ describe('LectureService', () => {
   });
 
   describe('addLecture', () => {
+    const user = new User();
+    user.accessLevel = 1;
+    user.name = 'Lectural';
+    user.profileImage = 'https://naver.com';
+    user.uniqueId = 'woaihgoweih';
+
+    const createLectureDto: CreateLectureDto = {
+      title: 'asdlkfnwelk',
+      content: 'asdf',
+      material: 'asdf',
+      startDate: '2022-04-19T12:00:00',
+      endDate: '2022-04-19T12:00:00',
+      placeIdx: 1,
+    };
+
     it('특강 생성 성공', async () => {
       lectureRepository.save.mockResolvedValue(mockLecture);
       placeRepository.getPlace.mockResolvedValue(mockPlace);
-
-      const user = new User();
-      user.accessLevel = 1;
-      user.name = 'Lectural';
-      user.profileImage = 'https://naver.com';
-      user.uniqueId = 'woaihgoweih';
-
-      const createLectureDto: CreateLectureDto = {
-        title: 'asdlkfnwelk',
-        content: 'asdf',
-        material: 'asdf',
-        startDate: '2022-04-19T12:00:00',
-        endDate: '2022-04-19T12:00:00',
-        placeIdx: 1,
-      };
 
       const result: Lecture = await lectureService.addLecture(
         createLectureDto,
@@ -173,6 +173,7 @@ describe('LectureService', () => {
         material: 'asdf',
         startDate: '2022-04-19T12:00:00',
         endDate: '2022-04-19T12:00:00',
+        uniqueId: 'woaihgoweih',
         place: {
           idx: 1,
           name: '특강 장소',
@@ -190,17 +191,6 @@ describe('LectureService', () => {
       lectureRepository.save.mockResolvedValue(mockLecture);
       placeRepository.getPlace.mockResolvedValue(null);
 
-      const user = new User();
-
-      const createLectureDto: CreateLectureDto = {
-        title: 'asdlkfnwelk',
-        content: 'asdf',
-        material: 'asdf',
-        startDate: '2022-04-19T12:00:00',
-        endDate: '2022-04-19T12:00:00',
-        placeIdx: 1,
-      };
-
       try {
         await lectureService.addLecture(createLectureDto, user);
       } catch (error) {
@@ -209,5 +199,49 @@ describe('LectureService', () => {
     });
   });
 
-  describe('특강 수정', () => {});
+  describe('modifyLecture', () => {
+    const modifyLectureDto: ModifyLectureDto = {
+      title: 'update',
+      content: 'update',
+      material: 'update',
+      startDate: '2022-04-19T12:00:00',
+      endDate: '2022-04-19T12:00:00',
+      placeIdx: 1,
+    };
+
+    const user = new User();
+    user.accessLevel = 1;
+    user.name = 'Lectural';
+    user.profileImage = 'https://naver.com';
+    user.uniqueId = 'woaihgoweih';
+
+    const updatedLecture = {
+      idx: 1,
+      title: 'update',
+      content: 'update',
+      material: 'update',
+      startDate: '2022-04-19T12:00:00',
+      endDate: '2022-04-19T12:00:00',
+      place: {
+        idx: 1,
+        name: '특강 장소',
+        type: 1,
+      },
+      user: mockUser,
+      createdAt: '2022-04-19T12:00:00',
+    };
+
+    it('글 수정 성공', async () => {
+      lectureRepository.findByIdx.mockResolvedValue(mockLecture);
+      placeRepository.getPlace.mockResolvedValue(mockPlace);
+
+      const result = await lectureService.modifyLecture(
+        1,
+        user,
+        modifyLectureDto,
+      );
+
+      expect(result).toEqual(updatedLecture);
+    });
+  });
 });

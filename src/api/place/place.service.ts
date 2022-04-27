@@ -10,7 +10,7 @@ import { PlaceRepository } from './repository/place.repository';
 @Injectable()
 export class PlaceService {
   constructor(
-    @InjectRepository(Place)
+    @InjectRepository(PlaceRepository)
     private readonly placeRepository: PlaceRepository,
     private readonly configService: ConfigService,
   ) {}

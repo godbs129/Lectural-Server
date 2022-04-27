@@ -17,7 +17,7 @@ import LectureRepository from './repository/lecture.repository';
 @Injectable()
 export class LectureService {
   constructor(
-    @InjectRepository(Lecture)
+    @InjectRepository(LectureRepository)
     private readonly lectureRepository: LectureRepository,
     private readonly placeService: PlaceService,
     private readonly applicatoinService: ApplicationService,
@@ -79,6 +79,7 @@ export class LectureService {
       endDate: data.endDate,
       place: place,
     });
+    console.log(lecture);
     await this.lectureRepository.save(lecture);
   }
 
