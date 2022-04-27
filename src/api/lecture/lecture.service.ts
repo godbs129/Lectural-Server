@@ -59,7 +59,7 @@ export class LectureService {
     idx: number,
     user: User,
     data: ModifyLectureDto,
-  ): Promise<void> {
+  ): Promise<Lecture> {
     const lecture: Lecture = await this.getLecture(idx);
 
     let place: Place;
@@ -78,9 +78,9 @@ export class LectureService {
       startDate: data.startDate,
       endDate: data.endDate,
       place: place,
+      placeIdx: data.placeIdx,
     });
-    console.log(lecture);
-    await this.lectureRepository.save(lecture);
+    return await this.lectureRepository.save(lecture);
   }
 
   /**
