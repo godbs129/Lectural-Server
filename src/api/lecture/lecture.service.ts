@@ -17,7 +17,7 @@ import LectureRepository from './repository/lecture.repository';
 @Injectable()
 export class LectureService {
   constructor(
-    @InjectRepository(Lecture)
+    @InjectRepository(LectureRepository)
     private readonly lectureRepository: LectureRepository,
     private readonly placeService: PlaceService,
     private readonly applicatoinService: ApplicationService,
@@ -59,7 +59,7 @@ export class LectureService {
     idx: number,
     user: User,
     data: ModifyLectureDto,
-  ): Promise<void> {
+  ): Promise<Lecture> {
     const lecture: Lecture = await this.getLecture(idx);
 
     let place: Place;
@@ -78,8 +78,9 @@ export class LectureService {
       startDate: data.startDate,
       endDate: data.endDate,
       place: place,
+      placeIdx: data.placeIdx,
     });
-    await this.lectureRepository.save(lecture);
+    return await this.lectureRepository.save(lecture);
   }
 
   /**

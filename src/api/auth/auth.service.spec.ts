@@ -25,16 +25,14 @@ describe('AuthService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         TokenModule,
-        UserRepository,
         ConfigModule.forRoot({
           isGlobal: true,
         }),
       ],
       providers: [
         AuthService,
-        UserRepository,
         {
-          provide: getRepositoryToken(User),
+          provide: getRepositoryToken(UserRepository),
           useValue: mockUserRepository(),
         },
       ],
@@ -42,7 +40,7 @@ describe('AuthService', () => {
 
     authService = module.get<AuthService>(AuthService);
     userRepository = module.get<MockRepository<UserRepository>>(
-      getRepositoryToken(User),
+      getRepositoryToken(UserRepository),
     );
   });
 

@@ -14,7 +14,7 @@ export class Notice {
   @PrimaryGeneratedColumn()
   idx!: number;
 
-  @RelationId((lecture: Lecture) => lecture.notice)
+  @RelationId((notice: Notice) => notice.lecture)
   lectureIdx!: number;
 
   @JoinColumn({ name: 'fk_lecture_idx' })
