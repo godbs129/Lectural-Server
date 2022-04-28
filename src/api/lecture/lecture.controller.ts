@@ -64,7 +64,14 @@ export class LectureController {
 
   @Delete('/:lectureIdx')
   @Roles(1)
-  async deleteLecture(@Param('lectureIdx') lectureIdx: number) {}
+  async deleteLecture(
+    @Param('lectureIdx') lectureIdx: number,
+    @Token() user: User,
+  ): Promise<Response> {
+    await this.lectureService.deleteLecture(lectureIdx, user);
+
+    return Response.ok('특강 삭제 성공');
+  }
 
   @Delete('/inapposite/:idx')
   @Roles(3)

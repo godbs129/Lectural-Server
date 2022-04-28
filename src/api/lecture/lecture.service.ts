@@ -123,4 +123,14 @@ export class LectureService {
 
     await this.applicatoinService.createApplication(lecture, user);
   }
+
+  async deleteLecture(lectureIdx: number, user: User): Promise<void> {
+    const lecture: Lecture = await this.getLecture(lectureIdx);
+
+    if (lecture.uniqueId !== user.uniqueId) {
+      throw new UnauthorizedException('자신의 특강이 아닙니다');
+    }
+
+    await this.lectureRepository.remove(lecture);
+  }
 }
