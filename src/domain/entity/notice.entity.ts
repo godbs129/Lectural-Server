@@ -2,27 +2,29 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
   PrimaryGeneratedColumn,
-  RelationId,
 } from 'typeorm';
-import { Lecture } from './lecture.entity';
 
 @Entity('notice')
 export class Notice {
   @PrimaryGeneratedColumn()
   idx!: number;
 
-  @RelationId((notice: Notice) => notice.lecture)
-  lectureIdx!: number;
-
-  @JoinColumn({ name: 'fk_lecture_idx' })
-  @ManyToOne(() => Lecture, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
+  @Column({
+    name: 'title',
+    nullable: false,
   })
-  lecture!: Lecture;
+  title: string;
+
+  @Column({
+    name: 'reason',
+  })
+  reason!: string;
+
+  @Column({
+    name: 'author',
+  })
+  author!: string;
 
   @Column({
     name: 'expire_date',

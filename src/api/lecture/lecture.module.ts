@@ -7,6 +7,7 @@ import { AuthModule } from '../auth/auth.module';
 import { TokenModule } from '../token/token.module';
 import { PlaceModule } from '../place/place.module';
 import { ApplicationModule } from '../application/application.module';
+import { NoticeModule } from '../notice/notice.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ApplicationModule } from '../application/application.module';
     TokenModule,
     PlaceModule,
     ApplicationModule,
+    NoticeModule,
   ],
   providers: [LectureService],
   controllers: [LectureController],

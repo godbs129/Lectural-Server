@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Lecture } from 'src/domain/entity/lecture.entity';
 import { Notice } from 'src/domain/entity/notice.entity';
 import { NoticeRepository } from './repository/notice.repository';
 
@@ -11,9 +10,16 @@ export class NoticeService {
     return this.noticeRepository.findByDate(new Date());
   }
 
-  createNotice(lecture: Lecture, expireDate: Date): void {
+  createNotice(
+    title: string,
+    reason: string,
+    author: string,
+    expireDate: Date,
+  ): void {
     this.noticeRepository.save({
-      lecture: lecture,
+      title: title,
+      reason: reason,
+      author: author,
       expireDate: expireDate,
     });
   }
