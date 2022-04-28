@@ -5,14 +5,13 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreateLectureDto } from 'src/domain/dto/lecture/create-lecture.dto';
 import { ModifyLectureDto } from 'src/domain/dto/lecture/modify-lecture.dto';
 import { Lecture } from 'src/domain/entity/lecture.entity';
-import { Place } from 'src/domain/entity/place.entity';
 import { User } from 'src/domain/entity/user.entity';
 import { ApplicationService } from '../application/application.service';
 import { ApplicationRepository } from '../application/repository/application.repository';
-import { UserRepository } from '../auth/repository/user.repository';
+import { NoticeService } from '../notice/notice.service';
+import { NoticeRepository } from '../notice/repository/notice.repository';
 import { PlaceService } from '../place/place.service';
 import { PlaceRepository } from '../place/repository/place.repository';
-import { TokenModule } from '../token/token.module';
 import { LectureService } from './lecture.service';
 import LectureRepository from './repository/lecture.repository';
 
@@ -75,9 +74,6 @@ describe('LectureService', () => {
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        TokenModule,
-        UserRepository,
-        ApplicationRepository,
         ConfigModule.forRoot({
           isGlobal: true,
         }),
@@ -87,6 +83,8 @@ describe('LectureService', () => {
         PlaceService,
         ApplicationService,
         ApplicationRepository,
+        NoticeService,
+        NoticeRepository,
         {
           provide: getRepositoryToken(LectureRepository),
           useValue: mockLectureRepository(),
@@ -154,7 +152,6 @@ describe('LectureService', () => {
       material: 'asdf',
       startDate: '2022-04-19T12:00:00',
       endDate: '2022-04-19T12:00:00',
-      placeIdx: 1,
     };
 
     it('특강 생성 성공', async () => {
