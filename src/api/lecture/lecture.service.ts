@@ -6,11 +6,13 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import validateData from 'src/common/lib/validateData';
 import { CreateLectureDto } from 'src/domain/dto/lecture/create-lecture.dto';
+import { DeleteInapposite } from 'src/domain/dto/lecture/delete-inapposite.dto';
 import { ModifyLectureDto } from 'src/domain/dto/lecture/modify-lecture.dto';
 import { Lecture } from 'src/domain/entity/lecture.entity';
 import { Place } from 'src/domain/entity/place.entity';
 import { User } from 'src/domain/entity/user.entity';
 import { ApplicationService } from '../application/application.service';
+import { NoticeService } from '../notice/notice.service';
 import { PlaceService } from '../place/place.service';
 import LectureRepository from './repository/lecture.repository';
 
@@ -21,6 +23,7 @@ export class LectureService {
     private readonly lectureRepository: LectureRepository,
     private readonly placeService: PlaceService,
     private readonly applicatoinService: ApplicationService,
+    private readonly noticeService: NoticeService,
   ) {}
 
   getLectures(): Promise<Lecture[]> {
@@ -40,8 +43,6 @@ export class LectureService {
   }
 
   async addLecture(data: CreateLectureDto, user: User): Promise<Lecture> {
-    const place: Place = await this.placeService.getPlace(data.placeIdx);
-
     const lecture: Lecture = this.lectureRepository.create({
       title: data.title,
       content: data.content,
@@ -49,8 +50,13 @@ export class LectureService {
       startDate: data.startDate,
       endDate: data.endDate,
       user: user,
-      place: place,
     });
+
+    if (data.placeIdx !== undefined) {
+      const place: Place = await this.placeService.getPlace(data.placeIdx);
+
+      lecture.place = place;
+    }
 
     return await this.lectureRepository.save(lecture);
   }
@@ -86,8 +92,20 @@ export class LectureService {
   /**
    * @description 부적절한 특강 삭제(관리자)
    */
-  async deleteInappositeLecture(idx: number): Promise<void> {
+  async deleteInappositeLecture(
+    idx: number,
+    data: DeleteInapposite,
+  ): Promise<void> {
     const lecture: Lecture = await this.getLecture(idx);
+
+    let expireDate: Date = new Date();
+    expireDate.setDate(expireDate.getDate() + 7);
+    this.noticeService.createNotice(
+      lecture.title,
+      data.reason,
+      lecture.user.name,
+      expireDate,
+    );
 
     await this.lectureRepository.remove(lecture);
   }
@@ -104,5 +122,15 @@ export class LectureService {
     const lecture: Lecture = await this.getLecture(lectureIdx);
 
     await this.applicatoinService.createApplication(lecture, user);
+  }
+
+  async deleteLecture(lectureIdx: number, user: User): Promise<void> {
+    const lecture: Lecture = await this.getLecture(lectureIdx);
+
+    if (lecture.uniqueId !== user.uniqueId) {
+      throw new UnauthorizedException('자신의 특강이 아닙니다');
+    }
+
+    await this.lectureRepository.remove(lecture);
   }
 }

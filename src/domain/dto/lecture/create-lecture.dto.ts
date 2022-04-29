@@ -29,5 +29,5 @@ export class CreateLectureDto {
 
   @IsOptional()
   @IsNumber()
-  placeIdx!: number;
+  placeIdx?: number;
 }

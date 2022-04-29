@@ -78,7 +78,4 @@ export class Lecture {
 
   @OneToMany(() => Application, (application) => application.lecture)
   application!: Application[];
-
-  @OneToMany(() => Notice, (notice) => notice.lecture)
-  notice!: Notice[];
 }
