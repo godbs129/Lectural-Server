@@ -13,6 +13,7 @@ import { Token } from 'src/common/decorators/token.decorator';
 import ResponseData from 'src/common/response/DataResponse';
 import { Response } from 'src/common/response/Response';
 import { CreateLectureDto } from 'src/domain/dto/lecture/create-lecture.dto';
+import { DeleteInapposite } from 'src/domain/dto/lecture/delete-inapposite.dto';
 import { ModifyLectureDto } from 'src/domain/dto/lecture/modify-lecture.dto';
 import { Lecture } from 'src/domain/entity/lecture.entity';
 import { User } from 'src/domain/entity/user.entity';
@@ -63,12 +64,22 @@ export class LectureController {
 
   @Delete('/:lectureIdx')
   @Roles(1)
-  async deleteLecture(@Param('lectureIdx') lectureIdx: number) {}
+  async deleteLecture(
+    @Param('lectureIdx') lectureIdx: number,
+    @Token() user: User,
+  ): Promise<Response> {
+    await this.lectureService.deleteLecture(lectureIdx, user);
+
+    return Response.ok('특강 삭제 성공');
+  }
 
   @Delete('/inapposite/:idx')
   @Roles(3)
-  async deleteInappositeLecture(@Param('idx') idx: number): Promise<Response> {
-    await this.lectureService.deleteInappositeLecture(idx);
+  async deleteInappositeLecture(
+    @Param('idx') idx: number,
+    @Body() data: DeleteInapposite,
+  ): Promise<Response> {
+    await this.lectureService.deleteInappositeLecture(idx, data);
 
     return Response.ok('부적절한 특강 삭제 성공');
   }
