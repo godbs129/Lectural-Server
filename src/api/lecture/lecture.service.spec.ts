@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -241,6 +241,40 @@ describe('LectureService', () => {
       );
 
       expect(result).toEqual(updatedLecture);
+    });
+
+    it('특강 수정_본인의 특강이 아닙니다', async () => {
+      const user = new User();
+      user.accessLevel = 1;
+      user.name = 'Lectural';
+      user.profileImage = 'https://naver.com';
+      user.uniqueId = 'notfound';
+
+      const updatedLecture = {
+        idx: 1,
+        title: 'update',
+        content: 'update',
+        material: 'update',
+        startDate: '2022-04-19T12:00:00',
+        endDate: '2022-04-19T12:00:00',
+        place: {
+          idx: 1,
+          name: '특강 장소',
+          type: 1,
+        },
+        uniqueId: 'woaihgoweih',
+        user: user,
+        createdAt: '2022-04-19T12:00:00',
+      };
+
+      lectureRepository.findByIdx.mockResolvedValue(mockLecture);
+      placeRepository.getPlace.mockResolvedValue(mockPlace);
+
+      try {
+        await lectureService.modifyLecture(1, user, updatedLecture);
+      } catch (error) {
+        expect(error).toBeInstanceOf(UnauthorizedException);
+      }
     });
   });
 });
