@@ -133,4 +133,8 @@ export class LectureService {
 
     await this.lectureRepository.remove(lecture);
   }
+
+  getTodayLecture(): Promise<Lecture[]> {
+    return this.lectureRepository.findByDate();
+  }
 }

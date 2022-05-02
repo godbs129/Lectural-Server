@@ -23,6 +23,14 @@ import { LectureService } from './lecture.service';
 export class LectureController {
   constructor(private readonly lectureService: LectureService) {}
 
+  @Get('/today')
+  async getTodayLecture(): Promise<ResponseData<Lecture[]>> {
+    return ResponseData.dataOk(
+      '오늘의 특강 조회 성공',
+      await this.lectureService.getTodayLecture(),
+    );
+  }
+
   @Get('/')
   async getLectures(): Promise<ResponseData<Lecture[]>> {
     const lectures: Lecture[] = await this.lectureService.getLectures();
