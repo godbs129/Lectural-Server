@@ -61,13 +61,15 @@ export class TokenService {
     return this.jwtService.sign(Payload, Options);
   }
 
-  refreshToken(refreshToken: string): string {
-    const { iss, uniqueId, sub }: IToken = this.verifyToken(refreshToken);
+  refreshToken(token: string): string[] {
+    const { iss, uniqueId, sub }: IToken = this.verifyToken(token);
 
     if (iss !== 'lectural' || sub !== 'refreshToken') {
       throw new BadRequestException('위조된 토큰');
     }
 
-    return this.generateAccessToken(uniqueId);
+    const accessToken = this.generateAccessToken(uniqueId);
+    const refreshToken = this.generateRefreshToken(uniqueId);
+    return [accessToken, refreshToken];
   }
 }
