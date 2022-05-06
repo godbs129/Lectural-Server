@@ -10,8 +10,8 @@ export class TokenController {
   @Post('/refresh')
   async refreshToken(
     @Body() data: RefreshTokenDto,
-  ): Promise<ResponseData<string>> {
-    const accessToken: string = this.tokenService.refreshToken(
+  ): Promise<ResponseData<string[]>> {
+    const accessToken: string[] = this.tokenService.refreshToken(
       data.refreshToken,
     );
 
