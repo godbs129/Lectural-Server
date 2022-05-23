@@ -1,7 +1,7 @@
 import {
+  ForbiddenException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import validateData from 'src/common/lib/validateData';
@@ -74,7 +74,7 @@ export class LectureService {
     }
 
     if (lecture.uniqueId !== user.uniqueId) {
-      throw new UnauthorizedException('본인의 특강이 아닙니다');
+      throw new ForbiddenException('본인의 특강이 아닙니다');
     }
 
     this.lectureRepository.merge(lecture, {
@@ -128,7 +128,7 @@ export class LectureService {
     const lecture: Lecture = await this.getLecture(lectureIdx);
 
     if (lecture.uniqueId !== user.uniqueId) {
-      throw new UnauthorizedException('자신의 특강이 아닙니다');
+      throw new ForbiddenException('자신의 특강이 아닙니다');
     }
 
     await this.lectureRepository.remove(lecture);
