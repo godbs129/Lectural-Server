@@ -14,6 +14,7 @@ import { PlaceService } from '../place/place.service';
 import { PlaceRepository } from '../place/repository/place.repository';
 import { LectureService } from './lecture.service';
 import LectureRepository from './repository/lecture.repository';
+import { TagsRepository } from './repository/tag.repository';
 
 const mockLectureRepository = () => ({
   find: jest.fn(),
@@ -21,6 +22,11 @@ const mockLectureRepository = () => ({
   save: jest.fn(),
   create: jest.fn(),
   merge: jest.fn(),
+});
+
+const mockTagsRepository = () => ({
+  create: jest.fn(),
+  save: jest.fn(),
 });
 
 const mockPlaceRepository = () => ({
@@ -67,6 +73,7 @@ type MockRepository<T = any> = Partial<Record<keyof T, jest.Mock>>;
 describe('LectureService', () => {
   let lectureService: LectureService;
   let lectureRepository: MockRepository<LectureRepository>;
+  let tagsRepository: MockRepository<TagsRepository>;
 
   let placeService: PlaceService;
   let placeRepository: MockRepository<PlaceRepository>;
@@ -93,12 +100,19 @@ describe('LectureService', () => {
           provide: getRepositoryToken(PlaceRepository),
           useValue: mockPlaceRepository(),
         },
+        {
+          provide: getRepositoryToken(TagsRepository),
+          useValue: mockTagsRepository(),
+        },
       ],
     }).compile();
 
     lectureService = module.get<LectureService>(LectureService);
     lectureRepository = module.get<MockRepository<LectureRepository>>(
       getRepositoryToken(LectureRepository),
+    );
+    tagsRepository = module.get<MockRepository<TagsRepository>>(
+      getRepositoryToken(TagsRepository),
     );
 
     placeService = module.get<PlaceService>(PlaceService);
@@ -150,6 +164,7 @@ describe('LectureService', () => {
       title: 'asdlkfnwelk',
       content: 'asdf',
       material: 'asdf',
+      tags: ['aa', 'aa'],
       startDate: '2022-04-19T12:00:00',
       endDate: '2022-04-19T12:00:00',
     };
