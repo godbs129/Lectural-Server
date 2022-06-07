@@ -11,6 +11,7 @@ import {
 import { Application } from './application.entity';
 import { Notice } from './notice.entity';
 import { Place } from './place.entity';
+import { Tags } from './tags.entity';
 import { User } from './user.entity';
 
 @Entity('lecture')
@@ -78,4 +79,7 @@ export class Lecture {
 
   @OneToMany(() => Application, (application) => application.lecture)
   application!: Application[];
+
+  @OneToMany(() => Tags, (tags) => tags.lecture)
+  tags!: Tags[];
 }

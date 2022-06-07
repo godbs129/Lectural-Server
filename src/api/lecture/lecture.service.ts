@@ -15,19 +15,24 @@ import { ApplicationService } from '../application/application.service';
 import { NoticeService } from '../notice/notice.service';
 import { PlaceService } from '../place/place.service';
 import LectureRepository from './repository/lecture.repository';
+import { TagsRepository } from './repository/tag.repository';
 
 @Injectable()
 export class LectureService {
   constructor(
     @InjectRepository(LectureRepository)
     private readonly lectureRepository: LectureRepository,
+    @InjectRepository(TagsRepository)
+    private readonly tagsRepository: TagsRepository,
     private readonly placeService: PlaceService,
     private readonly applicatoinService: ApplicationService,
     private readonly noticeService: NoticeService,
   ) {}
 
   getLectures(): Promise<Lecture[]> {
-    return this.lectureRepository.find();
+    return this.lectureRepository.find({
+      relations: ['tags'],
+    });
   }
 
   async getLecture(idx: number): Promise<Lecture> {
@@ -58,7 +63,17 @@ export class LectureService {
       lecture.place = place;
     }
 
-    return await this.lectureRepository.save(lecture);
+    const savedLecture: Lecture = await this.lectureRepository.save(lecture);
+
+    data.tags.map(async (tag) => {
+      const createTag = this.tagsRepository.create({
+        name: tag,
+        lecture: savedLecture,
+      });
+      await this.tagsRepository.save(createTag);
+    });
+
+    return savedLecture;
   }
 
   async modifyLecture(
