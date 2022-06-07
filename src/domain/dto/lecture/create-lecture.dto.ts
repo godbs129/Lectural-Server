@@ -1,4 +1,6 @@
 import {
+  ArrayMaxSize,
+  IsArray,
   IsDateString,
   IsNotEmpty,
   IsNumber,
@@ -18,6 +20,11 @@ export class CreateLectureDto {
   @IsNotEmpty()
   @IsString()
   material!: string;
+
+  @IsNotEmpty()
+  @IsArray()
+  @ArrayMaxSize(3)
+  tags!: string[];
 
   @IsNotEmpty()
   @IsDateString()
