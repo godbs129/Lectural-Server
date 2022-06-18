@@ -31,7 +31,7 @@ export class LectureService {
 
   getLectures(): Promise<Lecture[]> {
     return this.lectureRepository.find({
-      relations: ['tags'],
+      relations: ['tags', 'place', 'user'],
     });
   }
 
