@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmOptionsFactory } from '@nestjs/typeorm';
-import { join } from 'path';
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 
 @Injectable()
@@ -16,7 +15,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       password: this.configService.get<string>('DB_PW'),
       database: this.configService.get<string>('DB_DB'),
       port: +this.configService.get<number>('DB_PORT'),
-      entities: [join(__dirname + '/../../**/**/*.entity{.ts,.js}')],
+      entities: [__dirname + '/../../**/**/*.entity{.ts,.js}'],
       synchronize: true,
     };
   }
