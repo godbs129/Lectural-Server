@@ -167,6 +167,7 @@ describe('LectureService', () => {
       tags: ['aa', 'aa'],
       startDate: '2022-04-19T12:00:00',
       endDate: '2022-04-19T12:00:00',
+      picture: 'asdoifnaoweinoawen',
     };
 
     it('특강 생성 성공', async () => {
