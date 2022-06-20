@@ -51,6 +51,12 @@ export class Lecture {
   })
   endDate!: Date;
 
+  @Column({
+    name: 'picture',
+    nullable: false,
+  })
+  picture!: string;
+
   @CreateDateColumn({
     name: 'created_at',
     nullable: false,
