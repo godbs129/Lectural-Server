@@ -14,6 +14,7 @@ import { RoleGuard } from './common/guard/role.guard';
 import { ApplicationModule } from './api/application/application.module';
 import { RequestModule } from './api/request/request.module';
 import { NoticeModule } from './api/notice/notice.module';
+import { UploadModule } from './api/upload/upload.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { NoticeModule } from './api/notice/notice.module';
     ApplicationModule,
     RequestModule,
     NoticeModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [

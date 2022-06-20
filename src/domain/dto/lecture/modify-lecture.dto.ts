@@ -24,4 +24,8 @@ export class ModifyLectureDto {
   @IsOptional()
   @IsNumber()
   placeIdx?: number;
+
+  @IsOptional()
+  @IsString()
+  picture?: string;
 }
