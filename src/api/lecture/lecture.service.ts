@@ -30,9 +30,7 @@ export class LectureService {
   ) {}
 
   getLectures(): Promise<Lecture[]> {
-    return this.lectureRepository.find({
-      relations: ['tags', 'place', 'user'],
-    });
+    return this.lectureRepository.findAll();
   }
 
   async getLecture(idx: number): Promise<Lecture> {
