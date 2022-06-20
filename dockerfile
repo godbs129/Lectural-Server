@@ -2,9 +2,9 @@ FROM node:16
 
 WORKDIR /usr/src/lectural
 
-COPY package.json package.json
+COPY package.json
 
-RUN npm install
+RUN npm install --force
 
 COPY . .
 
