@@ -8,4 +8,5 @@ RUN npm install --force
 
 COPY . .
 
+CMD ["npm", "run", "build"]
 CMD ["npm", "run", "start"]
