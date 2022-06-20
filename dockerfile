@@ -8,4 +8,4 @@ RUN yarn
 
 COPY . .
 
-CMD ["yarn", "start:dev"]
+CMD ["yarn", "start"]
