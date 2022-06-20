@@ -37,4 +37,8 @@ export class CreateLectureDto {
   @IsOptional()
   @IsNumber()
   placeIdx?: number;
+
+  @IsNotEmpty()
+  @IsString()
+  picture!: string;
 }

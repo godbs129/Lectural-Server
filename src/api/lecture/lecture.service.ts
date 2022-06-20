@@ -55,6 +55,7 @@ export class LectureService {
       startDate: data.startDate,
       endDate: data.endDate,
       user: user,
+      picture: data.picture,
     });
 
     if (data.placeIdx !== undefined) {
@@ -100,6 +101,7 @@ export class LectureService {
       endDate: data.endDate,
       place: place,
       placeIdx: data.placeIdx,
+      picture: data.picture,
     });
     return await this.lectureRepository.save(lecture);
   }
