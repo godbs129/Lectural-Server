@@ -1,15 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { createImageURL } from 'src/common/lib/multerOption';
+import * as AWS from 'aws-sdk';
+import { AWSConfig } from 'src/config/config';
+
+const s3 = new AWS.S3();
+AWS.config.update({
+  accessKeyId: AWSConfig.accessKeyId,
+  secretAccessKey: AWSConfig.secretAccessKey,
+  region: process.env.AWS_REGION,
+});
 
 @Injectable()
 export class UploadService {
-  public uploadFiles(files: File[]): string[] {
-    const generatedFiles: string[] = [];
-
-    for (const file of files) {
-      generatedFiles.push(createImageURL(file));
-    }
-
-    return generatedFiles;
+  async uploadImage(files) {
+    const locations = [];
+    files.forEach((v) => locations.push(v.location));
+    return locations;
   }
 }
