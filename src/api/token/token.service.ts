@@ -39,7 +39,7 @@ export class TokenService {
     };
 
     const Options: JwtSignOptions = {
-      expiresIn: '100d',
+      expiresIn: '1m',
       issuer: 'lectural',
       subject: 'accessToken',
     };
