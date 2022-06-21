@@ -4,9 +4,8 @@ WORKDIR /usr/src/lectural
 
 COPY package.json package.json
 
-RUN npm install --force
+RUN yarn
 
 COPY . .
 
-CMD ["npm", "run", "build"]
-CMD ["npm", "run", "start"]
+CMD ["yarn", "start"]
