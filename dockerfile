@@ -6,8 +6,8 @@ WORKDIR /usr/src/lectural
 
 COPY package.json package.json
 
-RUN npm i
+RUN yarn
 
 COPY . .
 
-CMD ["npm", "run", "start"]
+CMD ["yarn", "start"]
