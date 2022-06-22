@@ -24,6 +24,7 @@ export default class LectureRepository extends Repository<Lecture> {
     return this.createQueryBuilder('lecture')
       .leftJoinAndSelect('lecture.user', 'user')
       .leftJoinAndSelect('lecture.tags', 'tags')
+      .leftJoinAndSelect('lecture.place', 'place')
       .where('DATE_FORMAT(start_date, "%Y-%m-%d") = CURDATE()')
       .getMany();
   }
