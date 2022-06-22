@@ -81,7 +81,7 @@ export class LectureController {
     return Response.ok('특강 삭제 성공');
   }
 
-  @Delete('/inapposite/:idx')
+  @Post('/inapposite/:idx')
   @Roles(3)
   async deleteInappositeLecture(
     @Param('idx') idx: number,
