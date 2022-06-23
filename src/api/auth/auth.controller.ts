@@ -21,7 +21,7 @@ export class AuthController {
 
     return ResponseData.dataOk(
       '로그인 url 조회 성공',
-      `http://dauth.b1nd.com/login?response_type=code&client_id=${clientId}&state=null&redirect_uri=http://localhost:3000`,
+      `http://dauth.b1nd.com/login?response_type=code&client_id=${clientId}&state=null&redirect_uri=http://lectural.kro.kr`,
     );
   }
 
